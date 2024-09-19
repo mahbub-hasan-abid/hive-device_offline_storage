@@ -1,67 +1,64 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hive_experiment/images%20storing%20and%20retriving/image_picker_controller.dart';
-import 'package:flutter_sound/flutter_sound.dart'; // For playing audio
+// import 'dart:io';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:flutter_sound/flutter_sound.dart';
+// import 'package:hive_experiment/images%20storing%20and%20retriving/image_picker_controller.dart';
 
-class DisplayImagePage extends StatefulWidget {
-  @override
-  _DisplayImagePageState createState() => _DisplayImagePageState();
-}
+// class DisplayMediaPage extends StatefulWidget {
+//   @override
+//   _DisplayMediaPageState createState() => _DisplayMediaPageState();
+// }
 
-class _DisplayImagePageState extends State<DisplayImagePage> {
-  final ImageController imageController = Get.find();
-  final FlutterSoundPlayer _player = FlutterSoundPlayer();
+// class _DisplayMediaPageState extends State<DisplayMediaPage> {
+//   final FlutterSoundPlayer _player = FlutterSoundPlayer();
+//   final ImageController imageController = Get.find();
 
-  @override
-  Widget build(BuildContext context) {
-    List<String> savedImages = imageController.getImagesFromStorage();
-    List<String> savedAudios = imageController.getAudiosFromStorage();
+//   @override
+//   void initState() {
+//     super.initState();
+//     _player.openPlayer();
+//   }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Saved Images and Audios'),
-      ),
-      body: savedImages.isEmpty
-          ? const Center(child: Text('No images stored'))
-          : GridView.builder(
-              padding: const EdgeInsets.all(10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: savedImages.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Image.file(
-                      File(savedImages[index]),
-                      fit: BoxFit.cover,
-                      height: 100,
-                    ),
-                    if (savedAudios.length > index)
-                      ElevatedButton(
-                        onPressed: () {
-                          _playAudio(savedAudios[index]);
-                        },
-                        child: const Text('Play Audio'),
-                      ),
-                  ],
-                );
-              },
-            ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Media Display'),
+//       ),
+//       body: Column(
+//         children: [
+//           Expanded(
+//             child: Obx(() {
+//               List<String> imagePaths = imageController.imagePaths;
+//               List<String> audioPaths = imageController.audioPaths;
 
-  Future<void> _playAudio(String path) async {
-    await _player.openPlayer();
-    await _player.startPlayer(fromURI: path);
-  }
+//               print('Image paths: $imagePaths'); // Debugging
+//               print('Audio paths: $audioPaths'); // Debugging
 
-  @override
-  void dispose() {
-    _player.closePlayer();
-    super.dispose();
-  }
-}
+//               return ListView.builder(
+//                 itemCount: imagePaths.length + audioPaths.length,
+//                 itemBuilder: (context, index) {
+//                   if (index < imagePaths.length) {
+//                     // Display Image
+//                     return Image.file(
+//                       File(imagePaths[index]),
+//                       fit: BoxFit.cover,
+//                     );
+//                   } else {
+//                     final audioIndex = index - imagePaths.length;
+//                     final audioPath = audioPaths[audioIndex];
+//                     return ListTile(
+//                       leading: Icon(Icons.audiotrack),
+//                       title: Text('Audio: ${audioPath.split('/').last}'),
+//                       onTap: () => _player.startPlayer(fromURI: audioPath),
+//                     );
+//                   }
+//                 },
+//               );
+//             }),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
